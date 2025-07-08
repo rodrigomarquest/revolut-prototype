@@ -2,113 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Revolut Support Prototype</title>
   <style>
     body {
       background-color: #f4f8fb;
-      font-family: Arial, sans-serif;
-      font-size: 18px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
       color: #333;
       margin: 0;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     header {
       background-color: #002663;
       color: #fff;
-      padding: 20px;
+      padding: 15px 20px;
       display: flex;
       align-items: center;
-      font-size: 24px;
+      font-size: 20px;
     }
     header img {
       height: 30px;
-      margin-right: 15px;
+      margin-right: 10px;
     }
     main {
+      flex: 1;
       max-width: 600px;
-      margin: 30px auto;
+      margin: 20px auto;
       background: #fff;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
     .chat-box {
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
       padding: 15px;
       min-height: 200px;
       background: #fafafa;
       overflow-y: auto;
       max-height: 300px;
+      transition: all 0.3s ease;
     }
     .message {
-      margin: 10px 0;
+      margin: 8px 0;
+      line-height: 1.4;
     }
     .input-area {
       display: flex;
-      margin-top: 15px;
+      align-items: center;
     }
     .input-area input {
       flex: 1;
       padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
       border-radius: 8px 0 0 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
     }
     .input-area button {
       padding: 10px 15px;
+      border: none;
+      cursor: pointer;
       font-size: 16px;
-      border: 1px solid #ccc;
+    }
+    .send-button {
       background-color: #007bff;
       color: #fff;
-      cursor: pointer;
       border-radius: 0;
     }
-    .input-area .mic-button {
-      padding: 10px 15px;
-      font-size: 20px;
-      border: 1px solid #ccc;
-      background: none;
-      color: #333;
-      cursor: pointer;
-      border-radius: 0 8px 8px 0;
-    }
-    .input-area .mic-button:hover {
-      color: #007bff;
-    }
-    .input-area button:hover {
+    .send-button:hover {
       background-color: #0056b3;
     }
+    .mic-button {
+      background: none;
+      border: 1px solid #ccc;
+      border-radius: 0 8px 8px 0;
+      font-size: 20px;
+      padding: 10px;
+    }
     .human-button {
-      margin-top: 20px;
-      display: block;
-      width: 100%;
       padding: 12px;
-      background-color: #007bff;
-      color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 18px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 17px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
     .human-button:hover {
       background-color: #0056b3;
     }
     .language-buttons {
       text-align: center;
-      margin-top: 15px;
     }
     .language-buttons button {
-      font-size: 24px;
+      font-size: 22px;
       margin: 0 5px;
-      cursor: pointer;
       border: none;
       background: none;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .language-buttons button:hover {
+      transform: scale(1.2);
     }
   </style>
 </head>
 <body>
-  <header><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Revolut_logo.svg/2560px-Revolut_logo.svg.png" alt="Revolut Logo"/><span id="headerText">Revolut Support - Trust Layer</span></header>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Revolut_logo_new.png" alt="Revolut Logo">
+    <span id="headerText">Revolut Support - Trust Layer</span>
+  </header>
   <main>
     <div class="language-buttons">
       <button onclick="changeLanguage('en')">🇬🇧</button>
@@ -125,7 +136,7 @@
 
     <div class="input-area">
       <input type="text" id="userInput" placeholder="Type your message here...">
-      <button onclick="sendMessage()">Send</button>
+      <button class="send-button" onclick="sendMessage()">Send</button>
       <button class="mic-button" onclick="startRecording()">🎤</button>
     </div>
 
@@ -136,36 +147,12 @@
     document.addEventListener('DOMContentLoaded', () => {
 
       const translations = {
-        en: {
-          header: 'Revolut Support - Trust Layer',
-          welcome: '👋 Hello Margaret! How can we help you today?',
-          speak: '🔔 Speak to a Human'
-        },
-        ga: {
-          header: 'Tacaíocht Revolut - Ciseal Iontaobhais',
-          welcome: '👋 Dia duit Margaret! Conas is féidir linn cabhrú leat inniu?',
-          speak: '🔔 Labhair le Duine'
-        },
-        fr: {
-          header: 'Support Revolut - Couche de Confiance',
-          welcome: '👋 Bonjour Margaret ! Comment pouvons-nous vous aider aujourd\'hui ?',
-          speak: '🔔 Parler à un Humain'
-        },
-        es: {
-          header: 'Soporte Revolut - Capa de Confianza',
-          welcome: '👋 Hola Margaret! ¿Cómo podemos ayudarte hoy?',
-          speak: '🔔 Hablar con un Humano'
-        },
-        pt: {
-          header: 'Suporte Revolut - Camada de Confiança',
-          welcome: '👋 Olá Margaret! Como podemos ajudar você hoje?',
-          speak: '🔔 Falar com um Humano'
-        },
-        ja: {
-          header: 'レボリュートサポート - 信頼レイヤー',
-          welcome: '👋 こんにちは、マーガレットさん！どのようにお手伝いできますか？',
-          speak: '🔔 人間と話す'
-        }
+        en: { header: 'Revolut Support - Trust Layer', welcome: '👋 Hello Margaret! How can we help you today?', speak: '🔔 Speak to a Human' },
+        ga: { header: 'Tacaíocht Revolut - Ciseal Iontaobhais', welcome: '👋 Dia duit Margaret! Conas is féidir linn cabhrú leat inniu?', speak: '🔔 Labhair le Duine' },
+        fr: { header: 'Support Revolut - Couche de Confiance', welcome: '👋 Bonjour Margaret ! Comment pouvons-nous vous aider aujourd\'hui ?', speak: '🔔 Parler à un Humain' },
+        es: { header: 'Soporte Revolut - Capa de Confianza', welcome: '👋 Hola Margaret! ¿Cómo podemos ayudarte hoy?', speak: '🔔 Hablar con un Humano' },
+        pt: { header: 'Suporte Revolut - Camada de Confiança', welcome: '👋 Olá Margaret! Como podemos ajudar você hoje?', speak: '🔔 Falar com um Humano' },
+        ja: { header: 'レボリュートサポート - 信頼レイヤー', welcome: '👋 こんにちは、マーガレットさん！どのようにお手伝いできますか？', speak: '🔔 人間と話す' }
       };
 
       window.changeLanguage = function(lang) {
@@ -178,7 +165,10 @@
         const userInput = document.getElementById('userInput');
         const chatBox = document.getElementById('chatBox');
         if (userInput.value.trim() !== '') {
-          chatBox.innerHTML += `<div class="message"><strong>You:</strong> ${userInput.value}</div>`;
+          const msg = document.createElement('div');
+          msg.className = 'message';
+          msg.innerHTML = `<strong>You:</strong> ${userInput.value}`;
+          chatBox.appendChild(msg);
           userInput.value = '';
           chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -186,21 +176,28 @@
 
       window.escalateToHuman = function() {
         const chatBox = document.getElementById('chatBox');
-        chatBox.innerHTML += `
-          <div class="message">Thank you, Margaret. A real person is reviewing this now. We'll update you shortly. ⏳</div>
-          <div class="message"><strong>Agent: Sarah J.</strong> - Estimated wait time: 2 minutes</div>
-        `;
-        alert("Your request has been escalated to a human agent.");
+        const msg1 = document.createElement('div');
+        msg1.className = 'message';
+        msg1.innerText = 'Thank you, Margaret. A real person is reviewing this now. We\'ll update you shortly. ⏳';
+
+        const msg2 = document.createElement('div');
+        msg2.className = 'message';
+        msg2.innerHTML = '<strong>Agent: Sarah J.</strong> - Estimated wait time: 2 minutes';
+
+        chatBox.appendChild(msg1);
+        chatBox.appendChild(msg2);
         chatBox.scrollTop = chatBox.scrollHeight;
+        alert("Your request has been escalated to a human agent.");
       }
 
       window.startRecording = function() {
         const chatBox = document.getElementById('chatBox');
-        chatBox.innerHTML += `
-          <div class="message"><strong>You (audio):</strong> 🎤 [Audio message sent]</div>
-        `;
-        alert("Audio recorded and sent (simulation). In a real app, audio would be captured here.");
+        const msg = document.createElement('div');
+        msg.className = 'message';
+        msg.innerHTML = '<strong>You (audio):</strong> 🎤 [Audio message sent]';
+        chatBox.appendChild(msg);
         chatBox.scrollTop = chatBox.scrollHeight;
+        alert("Audio recorded and sent (simulation). In a real app, audio would be captured here.");
       }
 
     });
