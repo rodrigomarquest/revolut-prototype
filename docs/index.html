@@ -53,6 +53,11 @@
     .message {
       margin: 8px 0;
       line-height: 1.4;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
     }
     .input-area {
       display: flex;
@@ -117,7 +122,7 @@
 </head>
 <body>
   <header>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Revolut_logo_new.png" alt="Revolut Logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Revolut_logo_new.svg/512px-Revolut_logo_new.svg.png" alt="Revolut Logo">
     <span id="headerText">Revolut Support - Trust Layer</span>
   </header>
   <main>
@@ -155,6 +160,14 @@
         ja: { header: 'レボリュートサポート - 信頼レイヤー', welcome: '👋 こんにちは、マーガレットさん！どのようにお手伝いできますか？', speak: '🔔 人間と話す' }
       };
 
+      const simulatedResponses = [
+        "Thank you for reaching out! 😊",
+        "Our team is here to help you. 🙌",
+        "Can you please provide more details? 📝",
+        "We are processing your request... 🔄",
+        "Your safety is our priority! 🔒"
+      ];
+
       window.changeLanguage = function(lang) {
         document.getElementById('headerText').innerText = translations[lang].header;
         document.getElementById('welcomeMessage').innerText = translations[lang].welcome;
@@ -169,6 +182,13 @@
           msg.className = 'message';
           msg.innerHTML = `<strong>You:</strong> ${userInput.value}`;
           chatBox.appendChild(msg);
+
+          const response = document.createElement('div');
+          response.className = 'message';
+          const randomReply = simulatedResponses[Math.floor(Math.random() * simulatedResponses.length)];
+          response.innerHTML = `<strong>Bot:</strong> ${randomReply}`;
+          chatBox.appendChild(response);
+
           userInput.value = '';
           chatBox.scrollTop = chatBox.scrollHeight;
         }
