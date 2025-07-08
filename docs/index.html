@@ -16,8 +16,13 @@
       background-color: #002663;
       color: #fff;
       padding: 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
       font-size: 24px;
+    }
+    header img {
+      height: 30px;
+      margin-right: 15px;
     }
     main {
       max-width: 600px;
@@ -33,9 +38,46 @@
       padding: 15px;
       min-height: 200px;
       background: #fafafa;
+      overflow-y: auto;
+      max-height: 300px;
     }
     .message {
       margin: 10px 0;
+    }
+    .input-area {
+      display: flex;
+      margin-top: 15px;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px 0 0 8px;
+    }
+    .input-area button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 0;
+    }
+    .input-area .mic-button {
+      padding: 10px 15px;
+      font-size: 20px;
+      border: 1px solid #ccc;
+      background: none;
+      color: #333;
+      cursor: pointer;
+      border-radius: 0 8px 8px 0;
+    }
+    .input-area .mic-button:hover {
+      color: #007bff;
+    }
+    .input-area button:hover {
+      background-color: #0056b3;
     }
     .human-button {
       margin-top: 20px;
@@ -52,26 +94,116 @@
     .human-button:hover {
       background-color: #0056b3;
     }
+    .language-buttons {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .language-buttons button {
+      font-size: 24px;
+      margin: 0 5px;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
   </style>
 </head>
 <body>
-  <header>Revolut Support - Trust Layer</header>
+  <header><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Revolut_logo.svg/2560px-Revolut_logo.svg.png" alt="Revolut Logo"/><span id="headerText">Revolut Support - Trust Layer</span></header>
   <main>
-    <div class="chat-box" id="chatBox">
-      <div class="message">👋 Hello Margaret! How can we help you today?</div>
+    <div class="language-buttons">
+      <button onclick="changeLanguage('en')">🇬🇧</button>
+      <button onclick="changeLanguage('ga')">🇮🇪</button>
+      <button onclick="changeLanguage('fr')">🇫🇷</button>
+      <button onclick="changeLanguage('es')">🇪🇸</button>
+      <button onclick="changeLanguage('pt')">🇧🇷</button>
+      <button onclick="changeLanguage('ja')">🇯🇵</button>
     </div>
-    <button class="human-button" onclick="escalateToHuman()">🔔 Speak to a Human</button>
+
+    <div class="chat-box" id="chatBox">
+      <div class="message" id="welcomeMessage">👋 Hello Margaret! How can we help you today?</div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your message here...">
+      <button onclick="sendMessage()">Send</button>
+      <button class="mic-button" onclick="startRecording()">🎤</button>
+    </div>
+
+    <button class="human-button" onclick="escalateToHuman()" id="humanButton">🔔 Speak to a Human</button>
   </main>
 
   <script>
-    function escalateToHuman() {
-      const chatBox = document.getElementById('chatBox');
-      chatBox.innerHTML += `
-        <div class="message">Thank you, Margaret. A real person is reviewing this now. We'll update you shortly. ⏳</div>
-        <div class="message"><strong>Agent: Sarah J.</strong> - Estimated wait time: 2 minutes</div>
-      `;
-      alert("Your request has been escalated to a human agent.");
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const translations = {
+        en: {
+          header: 'Revolut Support - Trust Layer',
+          welcome: '👋 Hello Margaret! How can we help you today?',
+          speak: '🔔 Speak to a Human'
+        },
+        ga: {
+          header: 'Tacaíocht Revolut - Ciseal Iontaobhais',
+          welcome: '👋 Dia duit Margaret! Conas is féidir linn cabhrú leat inniu?',
+          speak: '🔔 Labhair le Duine'
+        },
+        fr: {
+          header: 'Support Revolut - Couche de Confiance',
+          welcome: '👋 Bonjour Margaret ! Comment pouvons-nous vous aider aujourd\'hui ?',
+          speak: '🔔 Parler à un Humain'
+        },
+        es: {
+          header: 'Soporte Revolut - Capa de Confianza',
+          welcome: '👋 Hola Margaret! ¿Cómo podemos ayudarte hoy?',
+          speak: '🔔 Hablar con un Humano'
+        },
+        pt: {
+          header: 'Suporte Revolut - Camada de Confiança',
+          welcome: '👋 Olá Margaret! Como podemos ajudar você hoje?',
+          speak: '🔔 Falar com um Humano'
+        },
+        ja: {
+          header: 'レボリュートサポート - 信頼レイヤー',
+          welcome: '👋 こんにちは、マーガレットさん！どのようにお手伝いできますか？',
+          speak: '🔔 人間と話す'
+        }
+      };
+
+      window.changeLanguage = function(lang) {
+        document.getElementById('headerText').innerText = translations[lang].header;
+        document.getElementById('welcomeMessage').innerText = translations[lang].welcome;
+        document.getElementById('humanButton').innerText = translations[lang].speak;
+      }
+
+      window.sendMessage = function() {
+        const userInput = document.getElementById('userInput');
+        const chatBox = document.getElementById('chatBox');
+        if (userInput.value.trim() !== '') {
+          chatBox.innerHTML += `<div class="message"><strong>You:</strong> ${userInput.value}</div>`;
+          userInput.value = '';
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+      }
+
+      window.escalateToHuman = function() {
+        const chatBox = document.getElementById('chatBox');
+        chatBox.innerHTML += `
+          <div class="message">Thank you, Margaret. A real person is reviewing this now. We'll update you shortly. ⏳</div>
+          <div class="message"><strong>Agent: Sarah J.</strong> - Estimated wait time: 2 minutes</div>
+        `;
+        alert("Your request has been escalated to a human agent.");
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      window.startRecording = function() {
+        const chatBox = document.getElementById('chatBox');
+        chatBox.innerHTML += `
+          <div class="message"><strong>You (audio):</strong> 🎤 [Audio message sent]</div>
+        `;
+        alert("Audio recorded and sent (simulation). In a real app, audio would be captured here.");
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+    });
   </script>
 </body>
 </html>
