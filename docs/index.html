@@ -3,129 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Revolut Support Prototype</title>
+  <title>Revolut Support Prototype – Emotion-Aware Escalation</title>
   <style>
-    body {
-      background-color: #f4f8fb;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 16px;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      background-color: #002663;
-      color: #fff;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      font-size: 20px;
-    }
-    header img {
-      height: 30px;
-      margin-right: 10px;
-    }
-    main {
-      flex: 1;
-      max-width: 600px;
-      margin: 20px auto;
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .chat-box {
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 15px;
-      min-height: 200px;
-      background: #fafafa;
-      overflow-y: auto;
-      max-height: 300px;
-      transition: all 0.3s ease;
-    }
-    .message {
-      margin: 8px 0;
-      line-height: 1.4;
-      animation: fadeIn 0.5s ease;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-    .input-area {
-      display: flex;
-      align-items: center;
-    }
-    .input-area input {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px 0 0 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
-    .input-area button {
-      padding: 10px 15px;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .send-button {
-      background-color: #007bff;
-      color: #fff;
-      border-radius: 0;
-    }
-    .send-button:hover {
-      background-color: #0056b3;
-    }
-    .mic-button {
-      background: none;
-      border: 1px solid #ccc;
-      border-radius: 0 8px 8px 0;
-      font-size: 20px;
-      padding: 10px;
-    }
-    .human-button {
-      padding: 12px;
-      border: none;
-      background-color: #007bff;
-      color: #fff;
-      border-radius: 12px;
-      font-size: 17px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .human-button:hover {
-      background-color: #0056b3;
-    }
-    .language-buttons {
-      text-align: center;
-    }
-    .language-buttons button {
-      font-size: 22px;
-      margin: 0 5px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    .language-buttons button:hover {
-      transform: scale(1.2);
-    }
+    /* ====== Base layout ====== */
+    body{background:#f4f8fb;font-family:'Segoe UI',Arial,sans-serif;font-size:16px;color:#333;margin:0;padding:0;display:flex;flex-direction:column;min-height:100vh}
+    header{background:#002663;color:#fff;padding:15px 20px;display:flex;align-items:center;gap:10px;font-size:20px}
+    header img{height:30px}
+    main{flex:1;max-width:600px;margin:20px auto;background:#fff;border-radius:16px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,.1);display:flex;flex-direction:column;gap:15px}
+
+    /* ====== Chat box ====== */
+    .chat-box{border:1px solid #ddd;border-radius:12px;padding:15px;background:#fafafa;overflow-y:auto;max-height:300px;transition:all .3s ease}
+    .message{margin:8px 0;line-height:1.4;animation:fadeIn .5s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ====== Input & buttons ====== */
+    .input-area{display:flex;align-items:center}
+    .input-area input{flex:1;padding:10px;border:1px solid #ccc;border-radius:8px 0 0 8px;font-size:15px}
+    .input-area button{padding:10px 15px;border:none;font-size:16px;cursor:pointer}
+    .send-button{background:#007bff;color:#fff;border-radius:0}
+    .send-button:hover{background:#0056b3}
+    .mic-button{background:none;border:1px solid #ccc;border-radius:0 8px 8px 0;font-size:20px;padding:10px}
+    .human-button{padding:12px;background:#007bff;color:#fff;border:none;border-radius:12px;font-size:17px;cursor:pointer;transition:background .3s}
+    .human-button:hover{background:#0056b3}
+
+    .language-buttons{text-align:center}
+    .language-buttons button{font-size:22px;border:none;background:none;cursor:pointer;margin:0 5px;transition:transform .2s}
+    .language-buttons button:hover{transform:scale(1.15)}
+
+    /* ====== Callback buttons ====== */
+    .callback-options{margin-top:10px;display:flex;gap:6px}
+    .callback-options button{flex:1;padding:6px 8px;font-size:14px;border:1px solid #007bff;border-radius:8px;background:#fff;cursor:pointer}
+    .callback-options button:hover{background:#007bff;color:#fff}
   </style>
 </head>
 <body>
   <header>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Revolut_logo_new.svg/512px-Revolut_logo_new.svg.png" alt="Revolut Logo">
-    <span id="headerText">Revolut Support - Trust Layer</span>
+    <span id="headerText">Revolut Support – Trust Layer</span>
   </header>
+
   <main>
+    <!-- Language selector -->
     <div class="language-buttons">
       <button onclick="changeLanguage('en')">🇬🇧</button>
       <button onclick="changeLanguage('ga')">🇮🇪</button>
@@ -135,92 +53,124 @@
       <button onclick="changeLanguage('ja')">🇯🇵</button>
     </div>
 
+    <!-- Chat history area -->
     <div class="chat-box" id="chatBox">
       <div class="message" id="welcomeMessage">👋 Hello Margaret! How can we help you today?</div>
     </div>
 
+    <!-- Input -->
     <div class="input-area">
-      <input type="text" id="userInput" placeholder="Type your message here...">
+      <input id="userInput" placeholder="Type your message here…" />
       <button class="send-button" onclick="sendMessage()">Send</button>
       <button class="mic-button" onclick="startRecording()">🎤</button>
     </div>
 
-    <button class="human-button" onclick="escalateToHuman()" id="humanButton">🔔 Speak to a Human</button>
+    <button class="human-button" onclick="manualEscalate()" id="humanButton">🔔 Speak to a Human</button>
   </main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    /***********************  Translation data  ***************************/
+    const translations={
+      en:{header:'Revolut Support – Trust Layer',welcome:'👋 Hello Margaret! How can we help you today?',speak:'🔔 Speak to a Human'},
+      ga:{header:'Tacaíocht Revolut – Ciseal Iontaobhais',welcome:'👋 Dia duit Margaret! Conas is féidir linn cabhrú leat inniu?',speak:'🔔 Labhair le Duine'},
+      fr:{header:'Support Revolut – Couche de Confiance',welcome:'👋 Bonjour Margaret ! Comment pouvons-nous vous aider ?',speak:'🔔 Parler à un Humain'},
+      es:{header:'Soporte Revolut – Capa de Confianza',welcome:'👋 Hola Margaret ! ¿Cómo podemos ayudarte hoy?',speak:'🔔 Hablar con un Humano'},
+      pt:{header:'Suporte Revolut – Camada de Confiança',welcome:'👋 Olá Margaret! Como podemos ajudar você hoje?',speak:'🔔 Falar com um Humano'},
+      ja:{header:'レボリュートサポート – 信頼レイヤー',welcome:'👋 こんにちは、マーガレットさん！ご用件をお聞かせください。',speak:'🔔 人間と話す'}
+    };
 
-      const translations = {
-        en: { header: 'Revolut Support - Trust Layer', welcome: '👋 Hello Margaret! How can we help you today?', speak: '🔔 Speak to a Human' },
-        ga: { header: 'Tacaíocht Revolut - Ciseal Iontaobhais', welcome: '👋 Dia duit Margaret! Conas is féidir linn cabhrú leat inniu?', speak: '🔔 Labhair le Duine' },
-        fr: { header: 'Support Revolut - Couche de Confiance', welcome: '👋 Bonjour Margaret ! Comment pouvons-nous vous aider aujourd\'hui ?', speak: '🔔 Parler à un Humain' },
-        es: { header: 'Soporte Revolut - Capa de Confianza', welcome: '👋 Hola Margaret! ¿Cómo podemos ayudarte hoy?', speak: '🔔 Hablar con un Humano' },
-        pt: { header: 'Suporte Revolut - Camada de Confiança', welcome: '👋 Olá Margaret! Como podemos ajudar você hoje?', speak: '🔔 Falar com um Humano' },
-        ja: { header: 'レボリュートサポート - 信頼レイヤー', welcome: '👋 こんにちは、マーガレットさん！どのようにお手伝いできますか？', speak: '🔔 人間と話す' }
-      };
+    /***********************  Keyword & escalation settings  ***************************/
+    const keywordResponses={
+      'i need help':'Of course! We’re here to assist you. How can I help? 🤝',
+      'my account was scammed':'I’m really sorry to hear that. I’ll escalate this to a human agent immediately. 🔒'
+    };
 
-      const simulatedResponses = [
-        "Thank you for reaching out! 😊",
-        "Our team is here to help you. 🙌",
-        "Can you please provide more details? 📝",
-        "We are processing your request... 🔄",
-        "Your safety is our priority! 🔒"
-      ];
+    const highRiskKeywords=['scam','scammed','fraud','panic','stolen','hacked','hack','hijacked'];
 
-      window.changeLanguage = function(lang) {
-        document.getElementById('headerText').innerText = translations[lang].header;
-        document.getElementById('welcomeMessage').innerText = translations[lang].welcome;
-        document.getElementById('humanButton').innerText = translations[lang].speak;
+    /***********************  UI helpers  ***************************/
+    function appendMessage(html){
+      const box=document.getElementById('chatBox');
+      const div=document.createElement('div');
+      div.className='message';
+      div.innerHTML=html;
+      box.appendChild(div);
+      box.scrollTop=box.scrollHeight;
+    }
+
+    /***********************  Language switch  ***************************/
+    function changeLanguage(lang){
+      document.getElementById('headerText').innerText=translations[lang].header;
+      document.getElementById('welcomeMessage').innerText=translations[lang].welcome;
+      document.getElementById('humanButton').innerText=translations[lang].speak;
+    }
+
+    /***********************  Main send handler  ***************************/
+    function sendMessage(){
+      const input=document.getElementById('userInput');
+      const text=input.value.trim();
+      if(!text) return;
+      appendMessage(`<strong>You:</strong> ${text}`);
+      input.value='';
+
+      const lower=text.toLowerCase();
+      const isHighRisk=highRiskKeywords.some(kw=>lower.includes(kw));
+
+      if(isHighRisk){
+        autoEscalate();
+      }else{
+        normalBotReply(lower);
       }
+    }
 
-      window.sendMessage = function() {
-        const userInput = document.getElementById('userInput');
-        const chatBox = document.getElementById('chatBox');
-        if (userInput.value.trim() !== '') {
-          const msg = document.createElement('div');
-          msg.className = 'message';
-          msg.innerHTML = `<strong>You:</strong> ${userInput.value}`;
-          chatBox.appendChild(msg);
-
-          const response = document.createElement('div');
-          response.className = 'message';
-          const randomReply = simulatedResponses[Math.floor(Math.random() * simulatedResponses.length)];
-          response.innerHTML = `<strong>Bot:</strong> ${randomReply}`;
-          chatBox.appendChild(response);
-
-          userInput.value = '';
-          chatBox.scrollTop = chatBox.scrollHeight;
-        }
+    function normalBotReply(lower){
+      if(keywordResponses[lower]){
+        appendMessage(`<strong>Bot:</strong> ${keywordResponses[lower]}`);
+      }else{
+        appendMessage('<strong>Bot:</strong> Thank you for your message! 😊');
       }
+    }
 
-      window.escalateToHuman = function() {
-        const chatBox = document.getElementById('chatBox');
-        const msg1 = document.createElement('div');
-        msg1.className = 'message';
-        msg1.innerText = 'Thank you, Margaret. A real person is reviewing this now. We\'ll update you shortly. ⏳';
+    /***********************  Escalation flows  ***************************/
+    function autoEscalate(){
+      appendMessage('<strong>Bot:</strong> I detect this might be urgent. Escalating to a human agent… ⏳');
+      setTimeout(()=>{
+        humanAgentJoin();
+      },5000); // 5 s demo → 5 min prod
+    }
 
-        const msg2 = document.createElement('div');
-        msg2.className = 'message';
-        msg2.innerHTML = '<strong>Agent: Sarah J.</strong> - Estimated wait time: 2 minutes';
+    function manualEscalate(){
+      appendMessage('<strong>Bot:</strong> Connecting you to a human agent… ⏳');
+      setTimeout(()=>{
+        humanAgentJoin();
+      },1000);
+    }
 
-        chatBox.appendChild(msg1);
-        chatBox.appendChild(msg2);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        alert("Your request has been escalated to a human agent.");
-      }
+    function humanAgentJoin(){
+      appendMessage('<strong>Agent Sarah:</strong> Hi Margaret, I’m here to help right away.');
+      offerCallback();
+    }
 
-      window.startRecording = function() {
-        const chatBox = document.getElementById('chatBox');
-        const msg = document.createElement('div');
-        msg.className = 'message';
-        msg.innerHTML = '<strong>You (audio):</strong> 🎤 [Audio message sent]';
-        chatBox.appendChild(msg);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        alert("Audio recorded and sent (simulation). In a real app, audio would be captured here.");
-      }
+    function offerCallback(){
+      const options=document.createElement('div');
+      options.className='callback-options';
+      options.innerHTML=`<button onclick="instantCallback()">📞 Instant Callback</button><button onclick="scheduleCallback()">🗓️ Schedule Callback</button>`;
+      document.getElementById('chatBox').appendChild(options);
+      document.getElementById('chatBox').scrollTop=document.getElementById('chatBox').scrollHeight;
+    }
 
-    });
+    function instantCallback(){
+      appendMessage('<strong>Agent Sarah:</strong> Great! We’ll call you in the next few minutes. 📞');
+    }
+
+    function scheduleCallback(){
+      appendMessage('<strong>Agent Sarah:</strong> Sure, please suggest a suitable time and we’ll schedule your callback. 🗓️');
+    }
+
+    /***********************  Audio placeholder  ***************************/
+    function startRecording(){
+      appendMessage('<strong>You (audio):</strong> 🎤 [Audio message sent]');
+      alert('Audio recorded and sent (simulation).');
+    }
   </script>
 </body>
 </html>
